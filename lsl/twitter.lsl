@@ -16,11 +16,11 @@ string allowUrl = "You need to connect your twitter account in order to tweet fr
 
 list messages = ["Something went wrong, no url. ", "Status updated!", "An error ocured: ", "Logged in as @"];
 
-string SERVER = "sp2566a";
+string SERVER = "sp2566a"; //Our OpenSim returns the server name instead public url, set here the name and the url to be replaced bellow
 string URL    = "opensim.co:";
 
 string SITE_URL = "http://foravatars.com/sandbox/twitter/twitter.php"; //Main Twitter-Oauth URL
-string CONSUMER_KEY = "HST9LKni7MwEEqINmIyWg";
+string CONSUMER_KEY = "YOUR_CONSUMER_KEY_mIyWg";
 integer OAUTH_STATUS = FALSE; //TRUE when connected
 
 key httpRequest;
