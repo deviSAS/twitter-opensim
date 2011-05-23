@@ -19,7 +19,7 @@ list messages = ["Something went wrong, no url. ", "Status updated!", "An error 
 string SERVER = "sp2566a"; //Our OpenSim returns the server name instead public url, set here the name and the url to be replaced bellow
 string URL    = "opensim.co:";
 
-string SITE_URL = "http://foravatars.com/sandbox/twitter/twitter.php"; //Main Twitter-Oauth URL
+string SITE_URL = "http://PATH_TO_TWITTER_DIRECTORY/twitter.php"; //Main Twitter-Oauth URL
 string CONSUMER_KEY = "YOUR_CONSUMER_KEY_mIyWg";
 integer OAUTH_STATUS = FALSE; //TRUE when connected
 
