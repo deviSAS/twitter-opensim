@@ -12,11 +12,11 @@
 	
 	*/
 	
-	define('sid_secure', 'my-random-string-here'); // Change this to a random string
+	define('sid_secure', '23dia2342dasl'); // Change this to a random string
 	define('template', 'default.php');  // Template in use
 	
-	$twitter_keys = array(	array('consumer_key' => 'YOUR_CONSUMER_KEY_mIyWg',
-								  'consumer_secret' => 'YOUR_CONSUMER_KEY_SECRET_YzrQRszLCY',
+	$twitter_keys = array(	array('consumer_key' => '3vc6WmZQHDrnUDm63Rdow',
+								  'consumer_secret' => 'B8eYwGJItGImfeK2LQOHjt65NQrRToeTt3lg98Alg',
 								  'allowed_avatars' => array('UUID', 'UUID')), /* Allowed avatars (unused) */
 							/* Multiple apps :) */
 							array('consumer_key' => 'ABC', 

@@ -10,6 +10,7 @@
 	require_once('templates/templates.php');
 	require_once('tokens.php');
 	require_once('functions.php');
+	require_once('api.php');
 	
 	/** Gather some data from LSL **/
 	
@@ -51,63 +52,4 @@
 		$system = true;
 	}
 	
-	/** API CALLS **/
-	if($_GET['rq'] == 'url') {
-		$access_token = (array) $U_SESSION['access_token'];
-		if($U_SESSION['status'] == 'verified') getPage($U_SESSION['system_url'] . 'allow/true/' . $access_token['screen_name']);
-		if($system) die('url_updated');
-	}
-	
-	if($_GET['rq'] == 'allow') { // Twitter authentication call
-		
-		/** Check for status => verified, and use stored session **/
-		
-		$connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET);
-		$request_token = $connection->getRequestToken(); // Callback url for this user (ID)
-
-		$U_SESSION['oauth_token'] = $token = $request_token['oauth_token'];
-		$U_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
-		
-		switch ($connection->http_code) {
-		  case 200:
-			storeSession($ownerkey, $U_SESSION);
-			die( 'allow:' . $connection->getAuthorizeURL($token) );
-			break;
-		  default:
-			echo 'error:'; print_r(array(array($CONSUMER_KEY, $CONSUMER_SECRET), $U_SESSION));
-			exit;
-		}
-	} 
-	
-	/* Implement twitter api calls here */
-	
-	
-	/* 	Simple status update.
-		
-		Params:
-			rq => 'post'
-			status => string (required) {POST}
-	*/
-	if($_GET['rq'] == 'post' && ($U_SESSION['status'] == 'verified')) {
-		echo $_POST['status_update'];
-		$parameters = array('status' => $_POST['status']);
-		
-		$access_token = (array) $U_SESSION['access_token'];
-		$OAUTH_TOKEN = $access_token['oauth_token'];
-		$OAUTH_TOKEN_SECRET = $access_token['oauth_token_secret'];
-		
-		$connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $OAUTH_TOKEN, $OAUTH_TOKEN_SECRET);
-		$status = $connection->post('statuses/update', $parameters);
-		switch ($connection->http_code) {
-		  case 200:
-			getPage($U_SESSION['system_url'] . 'status/updated');
-			break;
-		  default:
-			$status_error = (array)$connection->http_info;
-			$status_error = json_decode($status_error[0]); /* ENCODE (base64?) */
-			getPage($U_SESSION['system_url'] . 'status/error/' . $status_error->error);
-			exit;
-		}
-	}
-	
-	print_r($U_SESSION);
+	apiCall($_GET['rq']); // Api moved to api.php

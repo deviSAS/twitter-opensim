@@ -51,9 +51,6 @@ default
                 integer index = llSubStringIndex(body, SERVER);
                 integer length = llStringLength(SERVER);
                 my_url = llInsertString(llDeleteSubString(body, index, index + length), index, URL);
-                
-                llOwnerSay(my_url);
-                
                 listener = llListen(listenChannel, "", llGetOwner(), "");
                 llOwnerSay("Type /" + (string)listenChannel + " Status here' to update your twitter status.");
                 doRequest("rq=url", ""); //Register current my_url
@@ -76,17 +73,11 @@ default
                         temp_msg = "";
                     }
                 } else {
-                    llOwnerSay(llList2String(messages, 2) + llDumpList2String(llParseString2List(llList2String(path_data, 2), ["+"], []), " "));
-                }
-            } else if(_type == "status") {
-                if(llList2String(path_data, 1) == "updated") {
-                    llOwnerSay(llList2String(messages, 1));
-                } else {
-                    llOwnerSay(llList2String(messages, 2) + llDumpList2String(llParseString2List(llList2String(path_data, 2), ["+"], []), " "));
+                    llOwnerSay(llList2String(messages, 2) + llBase64ToString(llList2String(response, 2)));
                 }
             }
             
-            llHTTPResponse(id, 200, "gotcha :)");
+            llHTTPResponse(id, 200, ";)");
         }
     }
     
@@ -105,10 +96,16 @@ default
     http_response(key request_id, integer status, list metadata, string body)
     {
         if(status == 200) {
-            //llOwnerSay("HTTP-Response: " + body);
             list response = llParseString2List(body, [":"], []);
-            if(llList2String(response, 0) == "allow") {
+			string resp_code = llList2String(response, 0);
+            if(resp_code == "allow") {
                 llLoadURL(llGetOwner(), allowUrl, llList2String(response, 1));
+            } else if(resp_code == "status") {
+                if(llList2String(response, 1) == "updated") {
+                    llOwnerSay(llList2String(messages, 1));
+                } else {
+                    llOwnerSay(llList2String(messages, 2) + llBase64ToString(llList2String(response, 2)));
+                }
             }
         }
     }
