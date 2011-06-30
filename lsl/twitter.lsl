@@ -1,14 +1,8 @@
 //
-// Twitter for OpenSim (not an app) v0.1.3
-// Developed by devi S.A.S - http://devi.com.co
-// Source code: http://github.com/deviSAS/twitter-opensim
-// Commercial use not allowed. Share & Remix
-//
-// This is a basic demo of the functionality of Twitter, you can extend it
-// by modifying the code in twitter.php. Please always keep the credits and
-// remember you are not allowed to use the application on a commercial basis
-// even if you have modified the code.
+// This tool provides the simplest functionality of twitter,
+// you can post status uptades to your account using this tool.
 
+// With the source code you can show users TL, Friends, Replys, DM and more.
 
 integer listenChannel = 12;
 integer listener      = -1;
@@ -16,11 +10,11 @@ string allowUrl = "You need to connect your twitter account in order to tweet fr
 
 list messages = ["Something went wrong, no url. ", "Status updated!", "An error ocured: ", "Logged in as @"];
 
-string SERVER = "sp2566a"; //Our OpenSim returns the server name instead public url, set here the name and the url to be replaced bellow
-string URL    = "opensim.co:";
+string SERVER = "SERVER_NAME_HERE";
+string URL    = "PUBLIC_URL_TO_REPLACE_WITH";
 
-string SITE_URL = "http://PATH_TO_TWITTER_DIRECTORY/twitter.php"; //Main Twitter-Oauth URL
-string CONSUMER_KEY = "YOUR_CONSUMER_KEY_mIyWg";
+string SITE_URL = "http://PATH_TO_TWITTER_CODE/twitter.php"; //Main Twitter-Oauth URL
+string CONSUMER_KEY = "CONSUMER_KEY_HERE";
 integer OAUTH_STATUS = FALSE; //TRUE when connected
 
 key httpRequest;
@@ -51,6 +45,9 @@ default
                 integer index = llSubStringIndex(body, SERVER);
                 integer length = llStringLength(SERVER);
                 my_url = llInsertString(llDeleteSubString(body, index, index + length), index, URL);
+                
+                llOwnerSay("My public URL is: " + my_url);
+                
                 listener = llListen(listenChannel, "", llGetOwner(), "");
                 llOwnerSay("Type /" + (string)listenChannel + " Status here' to update your twitter status.");
                 doRequest("rq=url", ""); //Register current my_url
@@ -73,11 +70,17 @@ default
                         temp_msg = "";
                     }
                 } else {
-                    llOwnerSay(llList2String(messages, 2) + llBase64ToString(llList2String(response, 2)));
+                    llOwnerSay(llList2String(messages, 2) + llDumpList2String(llParseString2List(llList2String(path_data, 2), ["+"], []), " "));
+                }
+            } else if(_type == "status") {
+                if(llList2String(path_data, 1) == "updated") {
+                    llOwnerSay(llList2String(messages, 1));
+                } else {
+                    llOwnerSay(llList2String(messages, 2) + llDumpList2String(llParseString2List(llList2String(path_data, 2), ["+"], []), " "));
                 }
             }
             
-            llHTTPResponse(id, 200, ";)");
+            llHTTPResponse(id, 200, "gotcha :)");
         }
     }
     
@@ -96,16 +99,12 @@ default
     http_response(key request_id, integer status, list metadata, string body)
     {
         if(status == 200) {
+            //llOwnerSay("HTTP-Response: " + body);
             list response = llParseString2List(body, [":"], []);
-			string resp_code = llList2String(response, 0);
-            if(resp_code == "allow") {
-                llLoadURL(llGetOwner(), allowUrl, llList2String(response, 1));
-            } else if(resp_code == "status") {
-                if(llList2String(response, 1) == "updated") {
-                    llOwnerSay(llList2String(messages, 1));
-                } else {
-                    llOwnerSay(llList2String(messages, 2) + llBase64ToString(llList2String(response, 2)));
-                }
+            if(llList2String(response, 0) == "allow") {
+                string build_link = llList2String(response, 1) + ":" + llList2String(response, 2);
+                llLoadURL(llGetOwner(), allowUrl, build_link);
+                //llOwnerSay("If you're not able to open the url, follow this link: " + build_link);
             }
         }
     }
