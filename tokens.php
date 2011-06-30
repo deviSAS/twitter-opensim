@@ -15,8 +15,8 @@
 	define('sid_secure', '23dia2342dasl'); // Change this to a random string
 	define('template', 'default.php');  // Template in use
 	
-	$twitter_keys = array(	array('consumer_key' => '3vc6WmZQHDrnUDm63Rdow',
-								  'consumer_secret' => 'B8eYwGJItGImfeK2LQOHjt65NQrRToeTt3lg98Alg',
+	$twitter_keys = array(	array('consumer_key' => 'CONSUMER_KEY_HERE',
+								  'consumer_secret' => 'CONSUMER_SECRET_HERE',
 								  'allowed_avatars' => array('UUID', 'UUID')), /* Allowed avatars (unused) */
 							/* Multiple apps :) */
 							array('consumer_key' => 'ABC', 
