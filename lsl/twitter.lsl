@@ -76,7 +76,7 @@ default
                 if(llList2String(path_data, 1) == "updated") {
                     llOwnerSay(llList2String(messages, 1));
                 } else {
-                    llOwnerSay(llList2String(messages, 2) + llDumpList2String(llParseString2List(llList2String(path_data, 2), ["+"], []), " "));
+                    llOwnerSay(llBase64ToString(llList2String(messages, 2)));
                 }
             }
             
@@ -99,12 +99,22 @@ default
     http_response(key request_id, integer status, list metadata, string body)
     {
         if(status == 200) {
-            //llOwnerSay("HTTP-Response: " + body);
+            llOwnerSay("HTTP-Response: " + body);
             list response = llParseString2List(body, [":"], []);
             if(llList2String(response, 0) == "allow") {
                 string build_link = llList2String(response, 1) + ":" + llList2String(response, 2);
                 llLoadURL(llGetOwner(), allowUrl, build_link);
                 //llOwnerSay("If you're not able to open the url, follow this link: " + build_link);
+            } else if(llList2String(response, 0) == "error") {
+                string error = llBase64ToString(llList2String(response, 1));
+                llOwnerSay("An error ocurred: " + error);
+            } else if(llList2String(response, 0) == "status") {
+                if(llList2String(response, 1) == "updated") 
+                    llOwnerSay("Status updated!");
+                    return;
+                    
+                string error = llBase64ToString(llList2String(response, 2));
+                llOwnerSay("An error ocurred: " + error);
             }
         }
     }
