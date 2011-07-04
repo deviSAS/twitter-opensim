@@ -81,6 +81,7 @@
 	
 	// Returns the twitter object authenticated with the access_tokens
 	function twitterConnect() {
+		global $CONSUMER_KEY, $U_SESSION, $CONSUMER_SECRET;
 		$access_token = (array) $U_SESSION['access_token'];
 		$OAUTH_TOKEN = $access_token['oauth_token'];
 		$OAUTH_TOKEN_SECRET = $access_token['oauth_token_secret'];
