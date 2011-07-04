@@ -99,7 +99,7 @@ default
     http_response(key request_id, integer status, list metadata, string body)
     {
         if(status == 200) {
-            llOwnerSay("HTTP-Response: " + body);
+            //llOwnerSay("HTTP-Response: " + body);
             list response = llParseString2List(body, [":"], []);
             if(llList2String(response, 0) == "allow") {
                 string build_link = llList2String(response, 1) + ":" + llList2String(response, 2);
