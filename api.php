@@ -2,6 +2,7 @@
 	/** API CALLS **/
 	
 	function apiCall($request) {
+		global $CONSUMER_KEY, $U_SESSION, $CONSUMER_SECRET;
 		switch($request) {
 			// First script call, checks for user registered
 			// and updates the system_url with the new one.
@@ -9,12 +10,13 @@
 				$access_token = (array) $U_SESSION['access_token'];
 				if($U_SESSION['status'] == 'verified') getPage($U_SESSION['system_url'] . 'allow/true/' . $access_token['screen_name']);
 				if($system) die('url_updated');
+				die('url');
 			break;
 			// Generates an URL that authenticates the avatar.
 			case 'allow': 
 				$connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET);
 				$request_token = $connection->getRequestToken(); // Callback url for this user (ID)
-
+		
 				$U_SESSION['oauth_token'] = $token = $request_token['oauth_token'];
 				$U_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
 				
@@ -24,7 +26,7 @@
 					die( 'allow:' . $connection->getAuthorizeURL($token) );
 				  break;
 				  default:
-					echo 'error:' . getError($connection->http_info, true);
+					echo 'error:' . getError($connection->http_info, true);// . ':' . var_dump($U_SESSION);
 				  exit;
 				}
 			break;
@@ -86,7 +88,9 @@
 	}
 	
 	// Return a string with the error detail given by twitter.
-	function getError((array)$data, $encode = false) {
-		$json_data = json_decode($data[0]);
-		return ($encode) ? base64_encode($json_data->error) : $json_data->error;
+	function getError($data, $encode = false) {
+		$data = (array) $data;
+		return ($encode) ? base64_encode($data[0]) : $data[0];
+		//$json_data = json_decode($data[0]);
+		//return ($encode) ? base64_encode($json_data->error) : $json_data->error;
 	}

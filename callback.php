@@ -37,7 +37,7 @@
 		
 		getPage($U_SESSION['system_url'] . 'allow/true/' . $access_token['screen_name']); /* Send to LSL */
 		
-		loadTemplate(array('title'=>'Logged In!', 'message' => 'You have logged in into Twitter with your Second Life account, close this window and start tweeting from in-world!'));
+		loadTemplate(array('title'=>'Logged In!', 'message' => 'You have logged in into Twitter with your OpenSim avatar account, close this window and start tweeting from in-world!'));
 	} else {
 		getPage($U_SESSION['system_url'] . 'allow/false/');
 		deleteSession($ownerkey);
